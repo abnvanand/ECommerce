@@ -42,7 +42,7 @@
 
             <EditText
                 android:id="@+id/name"
-                android:drawableLeft="@drawable/ic_face_white_24dp"
+                android:drawableLeft="@drawable/ic_username"
                 android:drawablePadding="5dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
 
             <EditText
                 android:id="@+id/email"
-                android:drawableLeft="@drawable/ic_mail_white_24dp"
+                android:drawableLeft="@drawable/ic_emailid"
                 android:drawablePadding="5dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:drawableLeft="@drawable/ic_lock_white_24dp"
+                android:drawableLeft="@drawable/ic_password"
                 android:drawablePadding="5dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

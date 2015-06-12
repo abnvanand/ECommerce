@@ -34,6 +34,11 @@
             android:label="@string/title_activity_dashboard"
             android:launchMode="singleTop" >
         </activity>
-    </application>
 
+        <activity
+            android:name=".SubActivity"
+            android:label="@string/title_activity_sub">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".DashboardActivity"/>
+        </activity>
+    </application>
 </manifest>
