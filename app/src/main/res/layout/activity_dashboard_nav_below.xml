@@ -23,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hello Batman"/>
+
         </FrameLayout>
 
         <fragment
@@ -33,7 +34,9 @@
             android:name="live.Abhinav.ecommerce.app.NavigationDrawerFragment"
             tools:layout="@layout/fragment_navigation_drawer">
 
+
             <LinearLayout
+                android:id="@+id/containerLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
