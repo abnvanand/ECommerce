@@ -1,5 +1,7 @@
 package live.Abhinav.ecommerce.app;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -9,18 +11,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import helper.SQLiteHandler;
 import helper.SessionManager;
+import live.Abhinav.ecommerce.fragments.DashboardFragment;
+import live.Abhinav.ecommerce.fragments.MyTransactionsFragment;
+import live.Abhinav.ecommerce.fragments.SettingsFragment;
+import live.Abhinav.ecommerce.fragments.NavigationDrawerFragment;
 
 import java.util.HashMap;
 
 
-public class DashboardActivity extends ActionBarActivity {
+public class DashboardActivity extends ActionBarActivity implements Communicator {
     //Logcat TAG
     private static final String TAG = DashboardActivity.class.getSimpleName();
+
+    //Fragments
+    FragmentManager fragmentManager;
+    DashboardFragment dashboardFragment;
+    MyTransactionsFragment myTransactionsFragment;
+    SettingsFragment settingsFragment;
+
 
     //Toolbar
     private Toolbar toolbar;
@@ -34,12 +48,20 @@ public class DashboardActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_nav_below);
 
+
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+
+
+        fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.topContainer, new DashboardFragment(), "A");
+//        transaction.add(R.id.bottomContainer, new MainFragment(), "M");
+        transaction.commit();
 
 
         txtName = (TextView) findViewById(R.id.name);
@@ -65,7 +87,6 @@ public class DashboardActivity extends ActionBarActivity {
         //Display the user details on the screen
         txtName.setText(name);
         txtEmail.setText(email);
-
 
     }
 
@@ -112,4 +133,71 @@ public class DashboardActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void myFunc(View view) {
+        Toast.makeText(this, "Clciked the button", Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    public void respond(int id) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        switch (id) {
+            case 0:
+                dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
+                myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
+                settingsFragment = (SettingsFragment) fragmentManager.findFragmentByTag("C");
+                if (myTransactionsFragment != null) transaction.hide(myTransactionsFragment);
+                if (settingsFragment != null) transaction.hide(settingsFragment);
+
+                if (dashboardFragment != null) {
+                    transaction.show(dashboardFragment);
+                    Log.d("Lifecycle", "shown A");
+
+                } else {
+                    dashboardFragment = new DashboardFragment();
+                    transaction.add(R.id.topContainer, dashboardFragment, "A");
+                    Log.d("Lifecycle", "Added A");
+                }
+                transaction.commit();
+                break;
+            case 1:
+                dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
+                myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
+                settingsFragment = (SettingsFragment) fragmentManager.findFragmentByTag("C");
+
+                if (dashboardFragment != null) transaction.hide(dashboardFragment);
+                if (settingsFragment != null) transaction.hide(settingsFragment);
+
+                if (myTransactionsFragment != null) {
+                    transaction.show(myTransactionsFragment);
+                    Log.d("Lifecycle", "shown B");
+                } else {
+                    myTransactionsFragment = new MyTransactionsFragment();
+                    transaction.add(R.id.topContainer, myTransactionsFragment, "B");
+                    Log.d("Lifecycle", "Added B");
+                }
+                transaction.commit();
+                break;
+            case 2:
+                dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
+                myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
+                settingsFragment = (SettingsFragment) fragmentManager.findFragmentByTag("C");
+
+                if (dashboardFragment != null) transaction.hide(dashboardFragment);
+                if (myTransactionsFragment != null) transaction.hide(myTransactionsFragment);
+
+                if (settingsFragment != null) {
+                    transaction.show(settingsFragment);
+                    Log.d("Lifecycle", "shown C");
+                } else {
+                    settingsFragment = new SettingsFragment();
+                    transaction.add(R.id.topContainer, settingsFragment, "C");
+                    Log.d("Lifecycle", "Added c");
+                }
+                transaction.commit();
+                break;
+        }
+    }
+
 }

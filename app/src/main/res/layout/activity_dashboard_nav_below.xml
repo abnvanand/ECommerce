@@ -15,23 +15,22 @@
         android:layout_height="match_parent"
         android:id="@+id/drawer_layout">
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/topContainer"
+            android:background="#eee"
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello Batman"/>
+            >
 
-        </FrameLayout>
+        </RelativeLayout>
 
         <fragment
             android:id="@+id/fragment_navigation_drawer"
             android:layout_width="@dimen/nav_drawer_width"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:name="live.Abhinav.ecommerce.app.NavigationDrawerFragment"
+            android:name="live.Abhinav.ecommerce.fragments.NavigationDrawerFragment"
             tools:layout="@layout/fragment_navigation_drawer">
 
 
@@ -42,7 +41,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:gravity="center"
-                android:background="@color/bg_login"
+                android:background="#335B6B"
                 android:orientation="vertical"
                 >
 

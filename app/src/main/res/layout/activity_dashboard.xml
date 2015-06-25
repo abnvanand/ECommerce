@@ -10,51 +10,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:paddingBottom="16dp">
 
         <include
             android:id="@+id/app_bar"
             layout="@layout/app_bar"/>
 
         <LinearLayout
+            android:id="@+id/topContainer"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/app_bar"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textColor="@color/lbl_name"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="13sp"/>
-
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dip"
-                android:background="#252525"
-                android:text="@string/btn_logout"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15dp"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -64,7 +35,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:layout="@layout/fragment_navigation_drawer"
-        android:name="live.Abhinav.ecommerce.app.NavigationDrawerFragment"
+        android:name="live.Abhinav.ecommerce.fragments.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>
