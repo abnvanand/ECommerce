@@ -22,7 +22,6 @@ public class AdapterTransactions extends RecyclerView.Adapter<AdapterTransaction
     private ArrayList<Transaction> listTransactions = new ArrayList<Transaction>();
     private LayoutInflater layoutInflater;
     private AppController volleySingleton;
-    private ImageLoader imageLoader;
 
 
     public AdapterTransactions(Context context) {
