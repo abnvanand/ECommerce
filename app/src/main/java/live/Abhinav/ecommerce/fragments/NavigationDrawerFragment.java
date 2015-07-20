@@ -77,8 +77,8 @@ public class NavigationDrawerFragment extends Fragment implements NavbarListAdap
 
     public static List<Information> getData() {
         List<Information> data = new ArrayList<Information>();
-        int[] icons = {R.drawable.ic_home_drawer, R.drawable.ic_transactions_drawer};
-        String[] titles = {"Home", "Transactions"};
+        int[] icons = {R.drawable.ic_home_drawer, R.drawable.ic_transactions_drawer,R.drawable.ic_transactions_drawer};
+        String[] titles = {"Home", "Transactions","QR Code Scanner"};
 //        for (int i = 0; i < titles.length && i < icons.length; i++) {
         for (int i = 0; i < titles.length && i< icons.length; i++) {
             Information current = new Information();

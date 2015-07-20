@@ -81,9 +81,9 @@ public class AdapterTopProducts extends RecyclerView.Adapter<AdapterTopProducts.
 
         public ViewHolderBoxOffice(View itemView) {
             super(itemView);
-            movieThumbnail=(ImageView)itemView.findViewById(R.id.movieThumbnail);
-            movieTitle= (TextView) itemView.findViewById(R.id.movieTitle);
-            movieReleaseDate = (TextView) itemView.findViewById(R.id.movieReleaseDate);
+            movieThumbnail=(ImageView)itemView.findViewById(R.id.productThumbnail);
+            movieTitle= (TextView) itemView.findViewById(R.id.productName);
+            movieReleaseDate = (TextView) itemView.findViewById(R.id.productPrice);
 //            movieAudienceScore= (RatingBar) itemView.findViewById(R.id.movieAudienceScore);
 
         }
