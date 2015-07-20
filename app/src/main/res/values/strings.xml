@@ -23,4 +23,5 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="title_activity_buy">BuyActivity</string>
     <string name="title_activity_sell">SellActivity</string>
+    <string name="title_activity_qr_code">QrCodeActivity</string>
 </resources>

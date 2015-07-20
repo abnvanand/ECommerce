@@ -17,7 +17,6 @@ import helper.SQLiteHandler;
 import helper.SessionManager;
 import live.Abhinav.ecommerce.fragments.DashboardFragment;
 import live.Abhinav.ecommerce.fragments.MyTransactionsFragment;
-import live.Abhinav.ecommerce.fragments.QrCodeScannerFragment;
 import live.Abhinav.ecommerce.fragments.NavigationDrawerFragment;
 
 import java.util.HashMap;
@@ -31,7 +30,8 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
     FragmentManager fragmentManager;
     DashboardFragment dashboardFragment;
     MyTransactionsFragment myTransactionsFragment;
-    QrCodeScannerFragment qrCodeScannerFragment;
+    QrCodeActivity qrCodeActivity;
+//    QrCodeScannerFragment qrCodeScannerFragment;
 
 
     //Toolbar
@@ -144,9 +144,9 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
             case 0:
                 dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
                 myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
-                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
+//                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
                 if (myTransactionsFragment != null) transaction.hide(myTransactionsFragment);
-                if (qrCodeScannerFragment != null) transaction.hide(qrCodeScannerFragment);
+//                if (qrCodeScannerFragment != null) transaction.hide(qrCodeScannerFragment);
 
                 if (dashboardFragment != null) {
                     transaction.show(dashboardFragment);
@@ -162,10 +162,10 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
             case 1:
                 dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
                 myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
-                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
+//                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
 
                 if (dashboardFragment != null) transaction.hide(dashboardFragment);
-                if (qrCodeScannerFragment != null) transaction.hide(qrCodeScannerFragment);
+//                if (qrCodeScannerFragment != null) transaction.hide(qrCodeScannerFragment);
 
                 if (myTransactionsFragment != null) {
                     transaction.show(myTransactionsFragment);
@@ -180,20 +180,22 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
             case 2:
                 dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
                 myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
-                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
+//                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
 
                 if (dashboardFragment != null) transaction.hide(dashboardFragment);
                 if (myTransactionsFragment != null) transaction.hide(myTransactionsFragment);
 
-                if (qrCodeScannerFragment != null) {
-                    transaction.show(qrCodeScannerFragment);
-                    Log.d("Lifecycle", "shown C");
-                } else {
-                    qrCodeScannerFragment = new QrCodeScannerFragment();
-                    transaction.add(R.id.topContainer, qrCodeScannerFragment, "C");
-                    Log.d("Lifecycle", "Added c");
-                }
+//                if (qrCodeScannerFragment != null) {
+//                    transaction.show(qrCodeScannerFragment);
+//                    Log.d("Lifecycle", "shown C");
+//                } else {
+//                    qrCodeScannerFragment = new QrCodeScannerFragment();
+//                    transaction.add(R.id.topContainer, qrCodeScannerFragment, "C");
+//                    Log.d("Lifecycle", "Added c");
+//                }
                 transaction.commit();
+                Intent intent=new Intent(this, QrCodeActivity.class);
+                startActivity(intent);
                 break;
         }
     }
