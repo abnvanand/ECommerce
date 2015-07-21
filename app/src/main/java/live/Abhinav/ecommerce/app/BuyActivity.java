@@ -3,6 +3,8 @@ package live.Abhinav.ecommerce.app;
 import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,7 +14,9 @@ import android.widget.Toast;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import live.Abhinav.ecommerce.adapters.AdapterProductsBySubCategory;
 import live.Abhinav.ecommerce.extras.AppConfig;
+import live.Abhinav.ecommerce.pojo.ProductBySubCategory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,13 +31,16 @@ public class BuyActivity extends ActionBarActivity {
 
     Spinner categorySpinner;
     Spinner subCategorySpinner;
-    Spinner productSpinner;
+
     private static final String TAG = BuyActivity.class.getSimpleName();
     private AppController volleySingleton;
     private RequestQueue requestQueue;
     private ProgressDialog pDialog;
     ArrayList<String> arrayList = new ArrayList<String>();
 
+    RecyclerView productRecyclerView;
+    private AdapterProductsBySubCategory adapterProductsBySubCategory;
+    private ArrayList<ProductBySubCategory> listTopProducts = new ArrayList<ProductBySubCategory>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +60,7 @@ public class BuyActivity extends ActionBarActivity {
         //Find all the spinners
         categorySpinner = (Spinner) findViewById(R.id.spinnerCategory);
         subCategorySpinner = (Spinner) findViewById(R.id.spinnerSubCategory);
-        productSpinner = (Spinner) findViewById(R.id.spinnerProduct);
+        productRecyclerView = (RecyclerView) findViewById(R.id.listProductsToBuy);
 
 
         //Set listener for all  the 3 spinners
@@ -75,6 +82,8 @@ public class BuyActivity extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedSubCategory = (String) parent.getSelectedItem();
                 sendProductRequest(selectedSubCategory);
+//                fetchProductsByName(selectedSubCategory);
+
             }
 
             @Override
@@ -82,19 +91,9 @@ public class BuyActivity extends ActionBarActivity {
 
             }
         });
+        productRecyclerView.setLayoutManager(new LinearLayoutManager(BuyActivity.this));
+        adapterProductsBySubCategory = new AdapterProductsBySubCategory(BuyActivity.this);
 
-        productSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedProduct = (String) parent.getSelectedItem();
-                fetchProductsByName(selectedProduct);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     private void fetchProductsByName(String selectedProduct) {
@@ -199,9 +198,10 @@ public class BuyActivity extends ActionBarActivity {
 
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                            arrayList = parseJSON(jsonArray, KEY_SUBCATEGORY_NAME, KEY_SUBCATEGORY_ID);
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(BuyActivity.this, android.R.layout.simple_spinner_item, arrayList);
-                            productSpinner.setAdapter(adapter);
+                            listTopProducts = parseJSONResponse(jsonArray);
+                            adapterProductsBySubCategory.setTopProductList(listTopProducts);
+                            productRecyclerView.setAdapter(adapterProductsBySubCategory);
+
                             hideDialog();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -219,7 +219,7 @@ public class BuyActivity extends ActionBarActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("subcategory", selectedSubCategory);
+                params.put("category_code", "100.100");
                 return params;
             }
         };
@@ -255,5 +255,37 @@ public class BuyActivity extends ActionBarActivity {
             }
         }
         return categoryList;
+    }
+
+    private ArrayList<ProductBySubCategory> parseJSONResponse(JSONArray response) {
+        ArrayList<ProductBySubCategory> listProducts = new ArrayList<ProductBySubCategory>();
+        if (response != null && response.length() > 0) {
+            try {
+                StringBuilder data = new StringBuilder();
+                JSONArray jsonArray=response;
+                for (int i=0;i<jsonArray.length();i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String pName=jsonObject.getString(KEY_NAME);
+                    String pPrice=jsonObject.getString(KEY_PRICE);
+                    String pUrlThumbnail= AppConfig.URL_THUBMNAIL_BASE +jsonObject.getString(KEY_THUMBNAIL);
+                    String pSNo = jsonObject.getString(KEY_SNO);
+
+                    data.append(pName + " " + pPrice + " " + pUrlThumbnail + " " + pSNo + "\n");
+
+                    ProductBySubCategory product = new ProductBySubCategory();
+                    product.setpName(pName);
+                    product.setpPrice(pPrice);
+                    product.setpUrlThumbnail(pUrlThumbnail);
+                    product.setpSNo(pSNo);
+
+                    listProducts.add(product);
+
+                }
+                Log.d("Lifecycle2", listProducts.toString());
+            } catch (JSONException e) {
+                Log.d("Lifecycle", "Inside JSON EXCEPTION: " + e);
+            }
+        }
+        return listProducts;
     }
 }

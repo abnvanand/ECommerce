@@ -61,12 +61,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/labelProduct"/>
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:id="@+id/spinnerProduct"
-            />
+        
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

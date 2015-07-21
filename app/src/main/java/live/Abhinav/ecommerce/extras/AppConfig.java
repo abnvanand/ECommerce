@@ -20,7 +20,7 @@ public class AppConfig {
 
     public static String URL_SUBCATEGORIES = "http://10.10.20.178/ecommerce/subcategories.php";
 
-    public static String URL_PRODUCTS_LIST = "http://10.10.20.178/volley/productslist.php";
+    public static String URL_PRODUCTS_LIST = "http://10.10.20.178/ecommerce/productList.php";
 
     public static String URL_IP="http://10.10.20.178/ecommerce/upload_media_test.php";
 
