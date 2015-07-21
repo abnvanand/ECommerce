@@ -16,13 +16,11 @@ import live.Abhinav.ecommerce.extras.AppConfig;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static live.Abhinav.ecommerce.extras.Keys.EndpointBoxOffice.*;
-
 
 public class BuyActivity extends ActionBarActivity {
     String[] items;

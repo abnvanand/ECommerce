@@ -17,7 +17,9 @@ import android.widget.*;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import helper.SQLiteHandler;
 import live.Abhinav.ecommerce.extras.AppConfig;
+import live.Abhinav.ecommerce.pojo.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +36,7 @@ import static live.Abhinav.ecommerce.extras.Keys.EndpointBoxOffice.*;
 public class SellActivity extends Activity {
 
     private static final String TAG = "SellActivity";
-    private String IP = "10.10.20.178";
+
     Bitmap bitmap;
 
     private ProgressDialog dialog = null;
@@ -58,6 +60,11 @@ public class SellActivity extends Activity {
     private ProgressDialog pDialog;
     ArrayList<String> arrayList = new ArrayList<String>();
 
+
+    String name;
+    String email;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +79,15 @@ public class SellActivity extends Activity {
         tv_productName = (TextView) findViewById(R.id.name);
         tv_productPrice = (TextView) findViewById(R.id.price);
         tv_productDescription = (TextView) findViewById(R.id.description);
+
+        //Sqlite database handler
+//        db = new SQLiteHandler(getApplicationContext());
+//        HashMap<String, String> user = db.getUserDetails();
+
+        User user = DashboardActivity.user1;
+        name = user.getName();
+        email = user.getEmail();
+
 
 
         //Progress Dialog
@@ -110,7 +126,7 @@ public class SellActivity extends Activity {
     // Before attempting to fetch the URL, makes sure that there is a network connection.
     public void myClickHandler(View view) {
         // Gets the URL from the UI's text field.
-        String stringUrl = "http://" + IP + "/send/upload_media_test.php";
+        String stringUrl = AppConfig.URL_IP ;
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -207,6 +223,7 @@ public class SellActivity extends Activity {
             conn.setRequestProperty("product_category", categorySpinner.getSelectedItem().toString());
             conn.setRequestProperty("product_subcategory", subCategorySpinner.getSelectedItem().toString());
             conn.setRequestProperty("product_description", tv_productDescription.getText().toString());
+            conn.setRequestProperty("product_seller", email);
 
             //Send request
             dos = new DataOutputStream(conn.getOutputStream());

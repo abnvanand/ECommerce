@@ -18,6 +18,7 @@ import helper.SessionManager;
 import live.Abhinav.ecommerce.fragments.DashboardFragment;
 import live.Abhinav.ecommerce.fragments.MyTransactionsFragment;
 import live.Abhinav.ecommerce.fragments.NavigationDrawerFragment;
+import live.Abhinav.ecommerce.pojo.User;
 
 import java.util.HashMap;
 
@@ -31,8 +32,8 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
     DashboardFragment dashboardFragment;
     MyTransactionsFragment myTransactionsFragment;
     QrCodeActivity qrCodeActivity;
-//    QrCodeScannerFragment qrCodeScannerFragment;
-
+    //    QrCodeScannerFragment qrCodeScannerFragment;
+    public static User user1;
 
     //Toolbar
     private Toolbar toolbar;
@@ -81,11 +82,12 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
         String name = user.get("name");
         String email = user.get("email");
 
+        user1 = new User(name, email);
+
         Log.d(TAG, user.toString());
         //Display the user details on the screen
         txtName.setText(name);
         txtEmail.setText(email);
-
     }
 
     /**
@@ -194,10 +196,9 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
 //                    Log.d("Lifecycle", "Added c");
 //                }
                 transaction.commit();
-                Intent intent=new Intent(this, QrCodeActivity.class);
+                Intent intent = new Intent(this, QrCodeActivity.class);
                 startActivity(intent);
                 break;
         }
     }
-
 }
