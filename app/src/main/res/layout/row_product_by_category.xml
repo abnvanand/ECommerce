@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/list_selector"
-    android:padding="5dip">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/list_selector"
+                android:padding="5dip">
 
     <LinearLayout
         android:id="@+id/thumbnail"
@@ -20,7 +20,7 @@
             android:layout_height="50dp"
             android:layout_marginBottom="@dimen/size_word"
             android:layout_marginTop="@dimen/size_word"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"/>
     </LinearLayout>
 
     <TextView
@@ -33,10 +33,10 @@
         android:textColor="#040404"
         android:typeface="sans"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/productDesc"
+        android:id="@+id/sellerName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/productName"
@@ -44,7 +44,22 @@
         android:textSize="10dip"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
-        android:text="" />
+        android:text="Tom Hanks"/>
+
+    <TextView
+        android:id="@+id/qrValue"
+        android:layout_width="wrap_content"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnBuy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buy"
+        android:layout_toRightOf="@id/thumbnail"
+        android:layout_alignBottom="@id/thumbnail"
+
+        />
 
     <TextView
         android:id="@+id/productPrice"
@@ -57,6 +72,6 @@
         android:layout_marginRight="5dip"
         android:textSize="30sp"
         android:textColor="#10bcc9"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
 </RelativeLayout>

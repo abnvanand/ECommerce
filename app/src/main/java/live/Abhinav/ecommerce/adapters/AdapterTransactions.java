@@ -23,6 +23,8 @@ public class AdapterTransactions extends RecyclerView.Adapter<AdapterTransaction
     private LayoutInflater layoutInflater;
     private AppController volleySingleton;
 
+    private float netBuy;
+    private float netSold;
 
     public AdapterTransactions(Context context) {
         layoutInflater = LayoutInflater.from(context);
@@ -48,11 +50,13 @@ public class AdapterTransactions extends RecyclerView.Adapter<AdapterTransaction
         holder.transactionDate.setText(currentTransaction.getDate());
         holder.transactionOtherPartyName.setText(currentTransaction.getOtherPartyName());
         holder.transactionCost.setText(currentTransaction.getCost());
-        if (currentTransaction.getIsBuy())
+        if (currentTransaction.getIsBuy()) {
+            netBuy += Float.parseFloat(currentTransaction.getCost());
             holder.transactionIndicator.setBackgroundColor(Color.parseColor("#FFD9642C"));
-        else if (currentTransaction.getIsSell())
+        } else if (currentTransaction.getIsSell()) {
+            netSold += Float.parseFloat(currentTransaction.getCost());
             holder.transactionIndicator.setBackgroundColor(Color.parseColor("#ff239642"));
-
+        }
     }
 
     @Override

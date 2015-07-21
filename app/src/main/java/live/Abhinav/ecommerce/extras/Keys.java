@@ -9,6 +9,8 @@ public interface Keys {
         public static final String KEY_PRICE="price";
         public static final String KEY_THUMBNAIL="thumbnail";
         public static final String KEY_SNO="sno";
+        public static final String KEY_SELLER_NAME="seller";
+        public static final String KEY_QRVALUE="QRValue";
         public static final String KEY_CATEGORY_NAME="categoryName";
         public static final String KEY_CATEGORY_ID="categoryId";
 

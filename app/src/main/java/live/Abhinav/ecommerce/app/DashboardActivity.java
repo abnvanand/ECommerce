@@ -180,9 +180,9 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
                 transaction.commit();
                 break;
             case 2:
-                dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
-                myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
-//                qrCodeScannerFragment = (QrCodeScannerFragment) fragmentManager.findFragmentByTag("C");
+//                dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
+//                myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
+
 
                 if (dashboardFragment != null) transaction.hide(dashboardFragment);
                 if (myTransactionsFragment != null) transaction.hide(myTransactionsFragment);
@@ -196,8 +196,28 @@ public class DashboardActivity extends ActionBarActivity implements Communicator
 //                    Log.d("Lifecycle", "Added c");
 //                }
                 transaction.commit();
-                Intent intent = new Intent(this, QrCodeActivity.class);
-                startActivity(intent);
+                Intent qrCode = new Intent(this, QrCodeActivity.class);
+                startActivity(qrCode);
+                break;
+            case 3:
+//                dashboardFragment = (DashboardFragment) fragmentManager.findFragmentByTag("A");
+//                myTransactionsFragment = (MyTransactionsFragment) fragmentManager.findFragmentByTag("B");
+
+
+                if (dashboardFragment != null) transaction.hide(dashboardFragment);
+                if (myTransactionsFragment != null) transaction.hide(myTransactionsFragment);
+
+//                if (qrCodeScannerFragment != null) {
+//                    transaction.show(qrCodeScannerFragment);
+//                    Log.d("Lifecycle", "shown C");
+//                } else {
+//                    qrCodeScannerFragment = new QrCodeScannerFragment();
+//                    transaction.add(R.id.topContainer, qrCodeScannerFragment, "C");
+//                    Log.d("Lifecycle", "Added c");
+//                }
+                transaction.commit();
+                Intent bookedItems = new Intent(this, BookedItemsActivity.class);
+                startActivity(bookedItems);
                 break;
         }
     }

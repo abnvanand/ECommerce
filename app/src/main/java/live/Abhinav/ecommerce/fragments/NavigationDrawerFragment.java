@@ -77,8 +77,11 @@ public class NavigationDrawerFragment extends Fragment implements NavbarListAdap
 
     public static List<Information> getData() {
         List<Information> data = new ArrayList<Information>();
-        int[] icons = {R.drawable.ic_home_drawer, R.drawable.ic_transactions_drawer,R.drawable.ic_transactions_drawer};
-        String[] titles = {"Home", "Transactions","QR Code Scanner"};
+        int[] icons = {R.drawable.ic_home_drawer,
+                R.drawable.ic_transactions_drawer,
+                R.drawable.ic_transactions_drawer,
+                R.drawable.ic_transactions_drawer};
+        String[] titles = {"Home", "Transactions","QR Code Scanner","Booked Items"};
 //        for (int i = 0; i < titles.length && i < icons.length; i++) {
         for (int i = 0; i < titles.length && i< icons.length; i++) {
             Information current = new Information();
@@ -86,7 +89,6 @@ public class NavigationDrawerFragment extends Fragment implements NavbarListAdap
             current.setTitle(titles[i % titles.length]);
             data.add(current);
         }
-
         return data;
     }
 
@@ -169,6 +171,11 @@ public class NavigationDrawerFragment extends Fragment implements NavbarListAdap
             case 2:
                 Toast.makeText(getActivity(), "Case 2", Toast.LENGTH_SHORT).show();
                 comm.respond(2);
+                mDrawerLayout.closeDrawers();
+                break;
+            case 3:
+                Toast.makeText(getActivity(), "See Booked Items", Toast.LENGTH_SHORT).show();
+                comm.respond(3);
                 mDrawerLayout.closeDrawers();
                 break;
             default:

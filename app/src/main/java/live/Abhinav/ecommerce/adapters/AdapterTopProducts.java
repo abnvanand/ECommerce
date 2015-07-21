@@ -47,15 +47,15 @@ public class AdapterTopProducts extends RecyclerView.Adapter<AdapterTopProducts.
     @Override
     public void onBindViewHolder(final ViewHolderBoxOffice holder, int position) {
         Product currentProduct= productArrayList.get(position);
-        holder.movieTitle.setText(currentProduct.getpName());
-        holder.movieReleaseDate.setText(currentProduct.getpPrice());
+        holder.productName.setText(currentProduct.getpName());
+        holder.productPrice.setText(currentProduct.getpPrice());
 //        holder.movieAudienceScore.setRating(currentProduct.getAudienceScore()/20.0f);
         String urlThumbnail = currentProduct.getpUrlThumbnail();
         if(urlThumbnail!=null) {
             imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean b) {
-                    holder.movieThumbnail.setImageBitmap(response.getBitmap());
+                    holder.productThumbnail.setImageBitmap(response.getBitmap());
                 }
 
                 @Override
@@ -73,17 +73,17 @@ public class AdapterTopProducts extends RecyclerView.Adapter<AdapterTopProducts.
 
     static class ViewHolderBoxOffice extends RecyclerView.ViewHolder {
 
-        private ImageView movieThumbnail;
-        private TextView movieTitle;
-        private TextView movieReleaseDate;
+        private ImageView productThumbnail;
+        private TextView productName;
+        private TextView productPrice;
         private RatingBar movieAudienceScore;
 
 
         public ViewHolderBoxOffice(View itemView) {
             super(itemView);
-            movieThumbnail=(ImageView)itemView.findViewById(R.id.productThumbnail);
-            movieTitle= (TextView) itemView.findViewById(R.id.productName);
-            movieReleaseDate = (TextView) itemView.findViewById(R.id.productPrice);
+            productThumbnail =(ImageView)itemView.findViewById(R.id.productThumbnail);
+            productName = (TextView) itemView.findViewById(R.id.productName);
+            productPrice = (TextView) itemView.findViewById(R.id.productPrice);
 //            movieAudienceScore= (RatingBar) itemView.findViewById(R.id.movieAudienceScore);
 
         }

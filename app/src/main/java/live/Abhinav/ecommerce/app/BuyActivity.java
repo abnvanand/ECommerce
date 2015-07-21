@@ -1,16 +1,13 @@
 package live.Abhinav.ecommerce.app;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -20,14 +17,14 @@ import live.Abhinav.ecommerce.pojo.ProductBySubCategory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static live.Abhinav.ecommerce.extras.Keys.EndpointBoxOffice.*;
 
-public class BuyActivity extends ActionBarActivity {
-    String[] items;
+public class BuyActivity extends Activity implements AdapterProductsBySubCategory.BuyItemClickListener {
 
     Spinner categorySpinner;
     Spinner subCategorySpinner;
@@ -38,9 +35,10 @@ public class BuyActivity extends ActionBarActivity {
     private ProgressDialog pDialog;
     ArrayList<String> arrayList = new ArrayList<String>();
 
-    RecyclerView productRecyclerView;
-    private AdapterProductsBySubCategory adapterProductsBySubCategory;
+    RecyclerView recyclerView;
+    private AdapterProductsBySubCategory adapter;
     private ArrayList<ProductBySubCategory> listTopProducts = new ArrayList<ProductBySubCategory>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +47,7 @@ public class BuyActivity extends ActionBarActivity {
         volleySingleton = AppController.getInstance();
         requestQueue = volleySingleton.getRequestQueue();
 
-        items = new String[]{""};
+
 
         //Progress Dialog
         pDialog = new ProgressDialog(this);
@@ -60,7 +58,7 @@ public class BuyActivity extends ActionBarActivity {
         //Find all the spinners
         categorySpinner = (Spinner) findViewById(R.id.spinnerCategory);
         subCategorySpinner = (Spinner) findViewById(R.id.spinnerSubCategory);
-        productRecyclerView = (RecyclerView) findViewById(R.id.listProductsToBuy);
+        recyclerView = (RecyclerView) findViewById(R.id.listProductsToBuy);
 
 
         //Set listener for all  the 3 spinners
@@ -91,8 +89,7 @@ public class BuyActivity extends ActionBarActivity {
 
             }
         });
-        productRecyclerView.setLayoutManager(new LinearLayoutManager(BuyActivity.this));
-        adapterProductsBySubCategory = new AdapterProductsBySubCategory(BuyActivity.this);
+//        recyclerView.setAdapter(adapter);
 
     }
 
@@ -199,8 +196,13 @@ public class BuyActivity extends ActionBarActivity {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             listTopProducts = parseJSONResponse(jsonArray);
-                            adapterProductsBySubCategory.setTopProductList(listTopProducts);
-                            productRecyclerView.setAdapter(adapterProductsBySubCategory);
+
+                            adapter = new AdapterProductsBySubCategory(BuyActivity.this);
+                            adapter.setBuyItemClickListener(BuyActivity.this);
+                            adapter.setTopProductList(listTopProducts);
+
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(BuyActivity.this));
 
                             hideDialog();
                         } catch (JSONException e) {
@@ -219,7 +221,7 @@ public class BuyActivity extends ActionBarActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("category_code", "100.100");
+                params.put("subCategory", selectedSubCategory);
                 return params;
             }
         };
@@ -262,24 +264,27 @@ public class BuyActivity extends ActionBarActivity {
         if (response != null && response.length() > 0) {
             try {
                 StringBuilder data = new StringBuilder();
-                JSONArray jsonArray=response;
-                for (int i=0;i<jsonArray.length();i++) {
+                JSONArray jsonArray = response;
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String pName=jsonObject.getString(KEY_NAME);
-                    String pPrice=jsonObject.getString(KEY_PRICE);
-                    String pUrlThumbnail= AppConfig.URL_THUBMNAIL_BASE +jsonObject.getString(KEY_THUMBNAIL);
+                    String pName = jsonObject.getString(KEY_NAME);
+                    String pPrice = jsonObject.getString(KEY_PRICE);
+                    String pUrlThumbnail = AppConfig.URL_THUBMNAIL_BASE + jsonObject.getString(KEY_THUMBNAIL);
                     String pSNo = jsonObject.getString(KEY_SNO);
+                    String sellerName = jsonObject.getString(KEY_SELLER_NAME);
+                    String qrValue = jsonObject.getString(KEY_QRVALUE);
 
-                    data.append(pName + " " + pPrice + " " + pUrlThumbnail + " " + pSNo + "\n");
+                    data.append(pName + " " + pPrice + " " + pUrlThumbnail + " " + pSNo + " " + sellerName +" "+qrValue+ "\n");
 
                     ProductBySubCategory product = new ProductBySubCategory();
                     product.setpName(pName);
+                    product.setSellerName(sellerName);
+                    product.setQrValue(qrValue);
                     product.setpPrice(pPrice);
                     product.setpUrlThumbnail(pUrlThumbnail);
                     product.setpSNo(pSNo);
 
                     listProducts.add(product);
-
                 }
                 Log.d("Lifecycle2", listProducts.toString());
             } catch (JSONException e) {
@@ -287,5 +292,46 @@ public class BuyActivity extends ActionBarActivity {
             }
         }
         return listProducts;
+    }
+
+    @Override
+    public void buttonClicked(String qrValue) {
+        Log.d("Abhinav","BuyActivity"+qrValue);
+        sendProductBuyRequest(qrValue,DashboardActivity.user1.getEmail());
+    }
+
+    private void sendProductBuyRequest(final String qrValue,final String email) {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_PRODUCTS_BUY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Product response: " + response);
+                        hideDialog();
+
+                        if (response.equals("success")) {
+                            Toast.makeText(BuyActivity.this, "Item has been Booked",Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(TAG, "Volley Error: " + volleyError.getMessage());
+                Toast.makeText(getApplicationContext(), volleyError.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", email);
+                params.put("QRvalue", "'"+qrValue+"'");
+                return params;
+            }
+        };
+        requestQueue.add(strReq);
     }
 }

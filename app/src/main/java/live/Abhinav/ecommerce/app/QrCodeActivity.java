@@ -1,7 +1,10 @@
 package live.Abhinav.ecommerce.app;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -14,11 +17,20 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.android.volley.*;
+import com.android.volley.toolbox.StringRequest;
+import live.Abhinav.ecommerce.extras.AppConfig;
 import net.sourceforge.zbar.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class QrCodeActivity extends Activity {
 
+    private static final String TAG = "QrCodeActivity";
     //Camera-----------------------start
     FrameLayout cameraPreview;
     private Camera mCamera;
@@ -32,6 +44,9 @@ public class QrCodeActivity extends Activity {
     private boolean previewing = true;
     //Camera-----------------------end
 
+    private AppController volleySingleton;
+    private RequestQueue requestQueue;
+    private ProgressDialog pDialog;
     TextView qrText;
     static {
         System.loadLibrary("iconv");
@@ -126,8 +141,11 @@ public class QrCodeActivity extends Activity {
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
                     // scanText.setText("barcode result " + sym.getData());
-                    Toast.makeText(getApplicationContext(), sym.getData(), Toast.LENGTH_SHORT).show();
-                    qrText.setText(sym.getData());
+                    String qrcode = sym.getData();
+                    Toast.makeText(getApplicationContext(), qrcode, Toast.LENGTH_SHORT).show();
+                    qrText.setText(qrcode);
+                    String[] arr = qrcode.split(" ");
+                    sendVerify(arr[0],arr[1],DashboardActivity.user1.getEmail());
 //                    adapterProducts.test(sym.getData());
                     barcodeScanned = true;
                 }
@@ -156,5 +174,58 @@ public class QrCodeActivity extends Activity {
     protected void onPause() {
         super.onPause();
         releaseCamera();
+    }
+    private void sendVerify(final String qrvalue,final String email,final String seller) {
+        //Progress Dialog
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_VERIFY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "QrActivity jjj:!" +response+"!");
+                        response=response.trim();
+                        if(response.equalsIgnoreCase("Done")) {
+                            Toast.makeText(QrCodeActivity.this, "Success",Toast.LENGTH_LONG).show();
+                            qrText.setTextColor(Color.GREEN);
+                        }
+                        else  {
+                            Toast.makeText(QrCodeActivity.this, "Failure",Toast.LENGTH_LONG).show();
+                            qrText.setTextColor(Color.RED);
+                        }
+                        hideDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(TAG, "Registration error: " + volleyError.getMessage());
+                Toast.makeText(getApplicationContext(), volleyError.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("QRvalue", "'"+qrvalue+"'");
+                params.put("buyer", email);
+                params.put("seller", seller);
+
+                return params;
+            }
+        };
+        // Addin grequest to request queue
+        AppController.getInstance().getRequestQueue().add(strReq);
+    }
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }
